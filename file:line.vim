@@ -1,7 +1,8 @@
 
 function! s:gotoline()
 	let file = bufname("%")
-	let names =  matchlist( file, '\(.*\):\(\d\+\)')
+	" Accept file:line:column: or file:line:column and file:line also
+	let names =  matchlist( file, '\(.\{-1,}\):\(\d\+\)\(:\(\d\+\):\?\)\?$')
 
 	if len(names) != 0 && filereadable(names[1])
 		let l:bufn = bufnr("%")
@@ -10,6 +11,10 @@ function! s:gotoline()
 		exec ":bdelete " . l:bufn
 		if foldlevel(names[2]) > 0
 			exec ":foldopen!"
+		endif
+
+		if (names[3] != '')
+			exec "normal " . names[4] . "|"
 		endif
 	endif
 
