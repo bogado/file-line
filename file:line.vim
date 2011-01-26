@@ -13,7 +13,7 @@ function! s:gotoline()
 		let l:bufn = bufnr("%")
 		exec "keepalt edit " . names[1]
 		exec ":" . names[2]
-		exec ":bdelete " . l:bufn
+		exec ":bwipeout " l:bufn
 		if foldlevel(names[2]) > 0
 			exec ":foldopen!"
 		endif
