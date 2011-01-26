@@ -1,3 +1,8 @@
+" Avoid installing twice or when in unsupported Vim version.
+if exists('g:loaded_file_line') || (v:version < 700)
+	finish
+endif
+let g:loaded_file_line = 1
 
 function! s:gotoline()
 	let file = bufname("%")
