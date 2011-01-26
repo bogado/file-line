@@ -19,7 +19,7 @@ function! s:gotoline()
 		endif
 
 		if (names[4] != '')
-			exec "normal " . names[4] . "|"
+			exec "normal! " . names[4] . '|'
 		endif
 	endif
 
