@@ -16,7 +16,7 @@ function! s:gotoline()
 	endif
 
 	" Accept file:line:column: or file:line:column and file:line also
-	let names =  matchlist( file, '\(.\{-1,}\):\%(\(\d\+\):\(\d*\):\?\)\?$')
+	let names =  matchlist( file, '\(.\{-1,}\):\%(\(\d\+\)\%(:\(\d*\):\?\)\?\)\?$')
 
 	if empty(names)
 		return
