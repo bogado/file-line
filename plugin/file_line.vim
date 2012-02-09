@@ -23,8 +23,8 @@ function! s:gotoline()
 	endif
 
 	let file_name = names[1]
-	let line_num = names[2]
-	let col_num = names[3]
+	let line_num  = names[2]
+	let  col_num  = names[3]
 
 	if filereadable(file_name)
 		let l:bufn = bufnr("%")
