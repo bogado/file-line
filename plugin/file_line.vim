@@ -32,7 +32,7 @@ function! s:gotoline()
 		exec ":" . line_num
 		exec ":bwipeout " l:bufn
 		if foldlevel(line_num) > 0
-			exec ":foldopen!"
+			exec "normal! zv"
 		endif
 
 		if (col_num != '')
