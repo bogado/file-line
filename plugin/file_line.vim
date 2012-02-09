@@ -32,10 +32,7 @@ function! s:gotoline()
 
 		exec "keepalt edit " . file_name
 		exec ":" . line_num
-		if (col_num != '')
-			exec "normal! " . col_num . '|'
-		endif
-
+		exec "normal! " . col_num . '|'
 		if foldlevel(line_num) > 0
 			exec "normal! zv"
 		endif
