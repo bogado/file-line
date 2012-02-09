@@ -28,16 +28,18 @@ function! s:gotoline()
 
 	if filereadable(file_name)
 		let l:bufn = bufnr("%")
+		exec ":bwipeout " l:bufn
+
 		exec "keepalt edit " . file_name
 		exec ":" . line_num
-		exec ":bwipeout " l:bufn
+		if (col_num != '')
+			exec "normal! " . col_num . '|'
+		endif
+
 		if foldlevel(line_num) > 0
 			exec "normal! zv"
 		endif
 
-		if (col_num != '')
-			exec "normal! " . col_num . '|'
-		endif
 
 		exec "normal! zz"
 	endif
