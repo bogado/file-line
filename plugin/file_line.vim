@@ -16,20 +16,30 @@ function! s:gotoline()
 	endif
 
 	" Accept file:line:column: or file:line:column and file:line also
-	let names =  matchlist( file, '\(.\{-1,}\):\(\d\+\)\(:\(\d*\):\?\)\?$')
+	let names =  matchlist( file, '\(.\{-1,}\):\(\d\+\)\%(:\(\d*\):\?\)\?$')
 
-	if len(names) != 0 && filereadable(names[1])
+	if empty(names)
+		return
+	endif
+
+	let file_name = names[1]
+	let line_num = names[2]
+	let col_num = names[3]
+
+	if filereadable(file_name)
 		let l:bufn = bufnr("%")
-		exec "keepalt edit " . names[1]
-		exec ":" . names[2]
+		exec "keepalt edit " . file_name
+		exec ":" . line_num
 		exec ":bwipeout " l:bufn
-		if foldlevel(names[2]) > 0
-			exec ":foldopen!"
+		if foldlevel(line_num) > 0
+			exec "normal! zv"
 		endif
 
-		if (names[4] != '')
-			exec "normal! " . names[4] . '|'
+		if (col_num != '')
+			exec "normal! " . col_num . '|'
 		endif
+
+		exec "normal! zz"
 	endif
 
 endfunction
