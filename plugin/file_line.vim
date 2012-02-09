@@ -38,6 +38,8 @@ function! s:gotoline()
 		if (col_num != '')
 			exec "normal! " . col_num . '|'
 		endif
+
+		exec "normal! zz"
 	endif
 
 endfunction
