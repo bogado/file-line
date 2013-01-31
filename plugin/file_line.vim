@@ -38,6 +38,7 @@ function! s:gotoline()
 		exec "normal! zz"
 
 		exec ":bwipeout " l:bufn
+		exec ":filetype detect"
 	endif
 
 endfunction
