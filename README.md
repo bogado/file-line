@@ -1,6 +1,6 @@
 # File-line
 
-### Plugin for vim to enabling opening a file in a given line
+### Plugin for vim to enable opening a file in a given line
 
 When you open a `file:line`, for instance when coping and pasting from an error from your
 compiler vim tries to open a file with a colon in its name.
