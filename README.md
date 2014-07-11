@@ -11,7 +11,7 @@ Examples:
     vim app/models/user.rb:1337
 
 With this little script in your plugins folder if the stuff after the colon is a number and
-a file exists with the name especified before the colon vim will open this file andtake you
+a file exists with the name especified before the colon vim will open this file and take you
 to the line you wished in the first place. 
 
 This script is licensed with GPLv3 and you can contribute to it on github at
