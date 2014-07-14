@@ -43,5 +43,5 @@ function! s:gotoline()
 
 endfunction
 
-autocmd! BufNewFile *:* nested call s:gotoline()
-autocmd! BufRead *:* nested call s:gotoline()
+autocmd! BufNewFile *:* nested silent call s:gotoline()
+autocmd! BufRead *:* nested silent call s:gotoline()
