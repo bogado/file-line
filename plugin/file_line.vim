@@ -4,6 +4,11 @@ if exists('g:loaded_file_line') || (v:version < 701)
 endif
 let g:loaded_file_line = 1
 
+
+function! s:attach()
+  bufdo call s:gotoline()
+endfunction
+
 function! s:gotoline()
 	let file = bufname("%")
 
@@ -14,8 +19,8 @@ function! s:gotoline()
 	if (filereadable(file))
 		return
 	endif
-
-	" Accept file:line:column: or file:line:column and file:line also
+	
+  " Accept file:line:column: or file:line:column and file:line also
 	let names =  matchlist( file, '\(.\{-1,}\):\%(\(\d\+\)\%(:\(\d*\):\?\)\?\)\?$')
 
 	if empty(names)
@@ -28,7 +33,6 @@ function! s:gotoline()
 
 	if filereadable(file_name)
 		let l:bufn = bufnr("%")
-
 		exec "keepalt edit " . fnameescape(file_name)
 		exec ":" . line_num
 		exec "normal! " . col_num . '|'
@@ -36,12 +40,11 @@ function! s:gotoline()
 			exec "normal! zv"
 		endif
 		exec "normal! zz"
-
 		exec ":bwipeout " l:bufn
-		exec ":filetype detect"
-	endif
-
+		
+    exec ":filetype detect"
+  endif
 endfunction
 
-autocmd! BufNewFile *:* nested call s:gotoline()
-autocmd! BufRead *:* nested call s:gotoline()
+
+autocmd! VimEnter * call s:attach()
