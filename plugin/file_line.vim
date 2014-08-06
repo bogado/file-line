@@ -15,11 +15,19 @@ function! s:gotoline()
 		return
 	endif
 
-	" Accept file:line:column: or file:line:column and file:line also
-	let names =  matchlist( file, '\(.\{-1,}\):\%(\(\d\+\)\%(:\(\d*\):\?\)\?\)\?$')
+	" Look for file(line), file(line:col).
+	" Done first, because the colon part could match below.
+	" Matches any non-( chars, the numbers, ")"" and optional "trash" at then.
+	let names =  matchlist( file, '\([^(]*\)(\%(\(\d\+\)\%(:\(\d*\):\?\)\?\))\?[^:) ]\{-}$')
 
 	if empty(names)
-		return
+		" Accept file:line:column: or file:line:column and file:line also
+		" Matches any non-: chars, then the numbers and optional "trash" at then.
+		let names =  matchlist( file, '\([^:]*\):\%(\(\d\+\)\%(:\(\d*\):\?\)\?\)\?[^: ]\{-}$')
+
+		if empty(names)
+			return
+		end
 	endif
 
 	let file_name = names[1]
