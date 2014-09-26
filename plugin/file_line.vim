@@ -4,6 +4,31 @@ if exists('g:loaded_file_line') || (v:version < 701)
 endif
 let g:loaded_file_line = 1
 
+" list with all possible expressions :
+"     matches file(10) or file(line:col)
+"     Accept file:line:column: or file:line:column and file:line also
+let s:regexpressions = [ '\([^(]\{-1,}\)(\%(\(\d\+\)\%(:\(\d*\):\?\)\?\))', '\(.\{-1,}\):\%(\(\d\+\)\%(:\(\d*\):\?\)\?\)\?' ]
+
+function! s:reopenAndGotoLine(file_name, line_num, col_num)
+    echomsg "Found " . a:file_name . " - " . a:line_num . " - " . a:col_num
+
+	if filereadable(a:file_name)
+		let l:bufn = bufnr("%")
+
+		exec "keepalt edit " . fnameescape(a:file_name)
+		exec ":" . a:line_num
+		exec "normal! " . a:col_num . '|'
+		if foldlevel(a:line_num) > 0
+			exec "normal! zv"
+		endif
+		exec "normal! zz"
+
+		exec ":bwipeout " l:bufn
+		exec ":filetype detect"
+	endif
+
+endfunction
+
 function! s:gotoline()
 	let file = bufname("%")
 
@@ -15,33 +40,21 @@ function! s:gotoline()
 		return
 	endif
 
-	" Accept file:line:column: or file:line:column and file:line also
-	let names =  matchlist( file, '\(.\{-1,}\):\%(\(\d\+\)\%(:\(\d*\):\?\)\?\)\?$')
+    let l:names = []
+    for regexp in s:regexpressions
+        echomsg "regexp = " . regexp
+        echomsg "file = " . file
+        let l:names =  matchlist(file, regexp)
 
-	if empty(names)
-		return
-	endif
-
-	let file_name = names[1]
-	let line_num  = names[2] == ''? '0' : names[2]
-	let  col_num  = names[3] == ''? '0' : names[3]
-
-	if filereadable(file_name)
-		let l:bufn = bufnr("%")
-
-		exec "keepalt edit " . fnameescape(file_name)
-		exec ":" . line_num
-		exec "normal! " . col_num . '|'
-		if foldlevel(line_num) > 0
-			exec "normal! zv"
-		endif
-		exec "normal! zz"
-
-		exec ":bwipeout " l:bufn
-		exec ":filetype detect"
-	endif
-
+        if ! empty(l:names)
+            let file_name = l:names[1]
+            let line_num  = l:names[2] == ''? '0' : l:names[2]
+            let  col_num  = l:names[3] == ''? '0' : l:names[3]
+            call s:reopenAndGotoLine(file_name, line_num, col_num)
+            break
+        endif
+    endfor
 endfunction
 
-autocmd! BufNewFile *:* nested call s:gotoline()
-autocmd! BufRead *:* nested call s:gotoline()
+autocmd! BufNewFile * nested call s:gotoline()
+autocmd! BufRead * nested call s:gotoline()
