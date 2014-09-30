@@ -42,8 +42,6 @@ function! s:gotoline()
 
     let l:names = []
     for regexp in s:regexpressions
-        echomsg "regexp = " . regexp
-        echomsg "file = " . file
         let l:names =  matchlist(file, regexp)
 
         if ! empty(l:names)
