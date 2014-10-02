@@ -10,8 +10,6 @@ let g:loaded_file_line = 1
 let s:regexpressions = [ '\([^(]\{-1,}\)(\%(\(\d\+\)\%(:\(\d*\):\?\)\?\))', '\(.\{-1,}\):\%(\(\d\+\)\%(:\(\d*\):\?\)\?\)\?' ]
 
 function! s:reopenAndGotoLine(file_name, line_num, col_num)
-    echomsg "Found " . a:file_name . " - " . a:line_num . " - " . a:col_num
-
 	if filereadable(a:file_name)
 		let l:bufn = bufnr("%")
 
