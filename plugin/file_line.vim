@@ -29,12 +29,13 @@ endfunction
 
 function! s:gotoline()
 	let file = bufname("%")
+        let file = substitute(file, '^\s*\(.\{-}\)\s*$', '\1', '')
 
 	" :e command calls BufRead even though the file is a new one.
 	" As a workarround Jonas Pfenniger<jonas@pfenniger.name> added an
 	" AutoCmd BufRead, this will test if this file actually exists before
 	" searching for a file and line to goto.
-	if (filereadable(file))
+	if (filereadable(file) || file == "")
 		return
 	endif
 
@@ -46,7 +47,7 @@ function! s:gotoline()
             let file_name = l:names[1]
             let line_num  = l:names[2] == ''? '0' : l:names[2]
             let  col_num  = l:names[3] == ''? '0' : l:names[3]
-            call s:reopenAndGotoLine(file_name, line_num, col_num)
+            silent call s:reopenAndGotoLine(file_name, line_num, col_num)
             break
         endif
     endfor
@@ -55,7 +56,9 @@ endfunction
 function s:startup()
     autocmd! BufNewFile * nested call s:gotoline()
     autocmd! BufRead * nested call s:gotoline()
-    bufdo call s:gotoline()
+    if bufname("%") != ""
+      bufdo call s:gotoline()
+    endif
     silent! bfirst
 endfunction
 
