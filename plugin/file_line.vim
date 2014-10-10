@@ -55,7 +55,7 @@ endfunction
 function s:startup()
 	autocmd! BufNewFile * nested call s:gotoline()
 	autocmd! BufRead * nested call s:gotoline()
-	bufdo call s:gotoline()
+	silent! bufdo call s:gotoline()
 	silent! bfirst
 	doautocmd FileType
 	doautocmd BufEnter
