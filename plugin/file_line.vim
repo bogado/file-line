@@ -53,10 +53,11 @@ function! s:gotoline()
 endfunction
 
 function s:startup()
+    let currBuff=bufnr("%")
     autocmd! BufNewFile * nested call s:gotoline()
     autocmd! BufRead * nested call s:gotoline()
     bufdo call s:gotoline()
-    silent! bfirst
+    silent! execute 'buffer ' . currBuff
 endfunction
 
 autocmd VimEnter * call s:startup()
