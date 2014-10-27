@@ -38,25 +38,30 @@ function! s:gotoline()
 		return
 	endif
 
-    let l:names = []
-    for regexp in s:regexpressions
-        let l:names =  matchlist(file, regexp)
+	let l:names = []
+	for regexp in s:regexpressions
+		let l:names =  matchlist(file, regexp)
 
-        if ! empty(l:names)
-            let file_name = l:names[1]
-            let line_num  = l:names[2] == ''? '0' : l:names[2]
-            let  col_num  = l:names[3] == ''? '0' : l:names[3]
-            call s:reopenAndGotoLine(file_name, line_num, col_num)
-            break
-        endif
-    endfor
+		if ! empty(l:names)
+			let file_name = l:names[1]
+			let line_num  = l:names[2] == ''? '0' : l:names[2]
+			let  col_num  = l:names[3] == ''? '0' : l:names[3]
+			call s:reopenAndGotoLine(file_name, line_num, col_num)
+			break
+		endif
+	endfor
 endfunction
 
 function s:startup()
-    autocmd! BufNewFile * nested call s:gotoline()
-    autocmd! BufRead * nested call s:gotoline()
-    bufdo call s:gotoline()
-    silent! bfirst
+	autocmd! BufNewFile * nested call s:gotoline()
+	autocmd! BufRead * nested call s:gotoline()
+	bufdo call s:gotoline()
+	silent! bfirst
+	doautocmd FileType
+	doautocmd BufEnter
+	if &diff
+		diffthis
+	endif
 endfunction
 
 autocmd VimEnter * call s:startup()
