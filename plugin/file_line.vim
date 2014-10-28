@@ -57,6 +57,11 @@ function s:startup()
     autocmd! BufRead * nested call s:gotoline()
     bufdo call s:gotoline()
     silent! bfirst
+    doautocmd FileType
+    doautocmd BufEnter
+    if &diff
+        diffthis
+    endif
 endfunction
 
 autocmd VimEnter * call s:startup()
