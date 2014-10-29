@@ -5,8 +5,8 @@ endif
 let g:loaded_file_line = 1
 
 " list with all possible expressions :
-"     matches file(10) or file(line:col)
-"     Accept file:line:column: or file:line:column and file:line also
+"	 matches file(10) or file(line:col)
+"	 Accept file:line:column: or file:line:column and file:line also
 let s:regexpressions = [ '\([^(]\{-1,}\)(\%(\(\d\+\)\%(:\(\d*\):\?\)\?\))', '\(.\{-1,}\):\%(\(\d\+\)\%(:\(\d*\):\?\)\?\)\?' ]
 
 function! s:reopenAndGotoLine(file_name, line_num, col_num)
@@ -38,30 +38,30 @@ function! s:gotoline()
 		return
 	endif
 
-    let l:names = []
-    for regexp in s:regexpressions
-        let l:names =  matchlist(file, regexp)
+	let l:names = []
+	for regexp in s:regexpressions
+		let l:names =  matchlist(file, regexp)
 
-        if ! empty(l:names)
-            let file_name = l:names[1]
-            let line_num  = l:names[2] == ''? '0' : l:names[2]
-            let  col_num  = l:names[3] == ''? '0' : l:names[3]
-            call s:reopenAndGotoLine(file_name, line_num, col_num)
-            break
-        endif
-    endfor
+		if ! empty(l:names)
+			let file_name = l:names[1]
+			let line_num  = l:names[2] == ''? '0' : l:names[2]
+			let  col_num  = l:names[3] == ''? '0' : l:names[3]
+			call s:reopenAndGotoLine(file_name, line_num, col_num)
+			break
+		endif
+	endfor
 endfunction
 
 function s:startup()
-    autocmd! BufNewFile * nested call s:gotoline()
-    autocmd! BufRead * nested call s:gotoline()
-    bufdo call s:gotoline()
-    silent! bfirst
-    doautocmd FileType
-    doautocmd BufEnter
-    if &diff
-        diffthis
-    endif
+	autocmd! BufNewFile * nested call s:gotoline()
+	autocmd! BufRead * nested call s:gotoline()
+	silent! bufdo call s:gotoline()
+	silent! bfirst
+	doautocmd FileType
+	doautocmd BufEnter
+	if &diff
+		diffthis
+	endif
 endfunction
 
 autocmd VimEnter * call s:startup()
