@@ -27,3 +27,13 @@ And launch `:BundleInstall` from Vim.
 Or just copy the file into your plugins path (`$HOME/.vim/plugin` under
 unixes).
 
+## Configuration
+
+There is an option to control when the plugin should get used.
+
+If you want it to handle only files during Vim startup (when passing the files
+as arguments), you can use the following setting
+
+    let g:file_line_only_on_vimenter = 1
+
+The default value is 0.

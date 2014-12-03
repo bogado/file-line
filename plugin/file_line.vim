@@ -4,6 +4,10 @@ if exists('g:loaded_file_line') || (v:version < 701)
 endif
 let g:loaded_file_line = 1
 
+if !exists('g:file_line_only_on_enter')
+	let g:file_line_only_on_vimenter = 0
+endif
+
 " list with all possible expressions :
 "	 matches file(10) or file(line:col)
 "	 Accept file:line:column: or file:line:column and file:line also
@@ -28,6 +32,9 @@ function! s:reopenAndGotoLine(file_name, line_num, col_num)
 endfunction
 
 function! s:gotoline()
+	if g:file_line_only_on_vimenter && !has('vim_starting')
+		return
+	endif
 	let file = bufname("%")
 
 	" :e command calls BufRead even though the file is a new one.
