@@ -25,7 +25,6 @@ function! s:reopenAndGotoLine(file_name, line_num, col_num)
 		exec "normal! zv"
 	endif
 	exec "normal! zz"
-	exec "filetype detect"
 endfunction
 
 function! s:gotoline()
