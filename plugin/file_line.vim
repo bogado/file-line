@@ -10,21 +10,22 @@ let g:loaded_file_line = 1
 let s:regexpressions = [ '\([^(]\{-1,}\)(\%(\(\d\+\)\%(:\(\d*\):\?\)\?\))', '\(.\{-1,}\):\%(\(\d\+\)\%(:\(\d*\):\?\)\?\)\?' ]
 
 function! s:reopenAndGotoLine(file_name, line_num, col_num)
-	if filereadable(a:file_name)
-		let l:bufn = bufnr("%")
-
-		exec "keepalt edit " . fnameescape(a:file_name)
-		exec a:line_num
-		exec "normal! " . a:col_num . '|'
-		if foldlevel(a:line_num) > 0
-			exec "normal! zv"
-		endif
-		exec "normal! zz"
-
-		exec "bwipeout " l:bufn
-		exec "filetype detect"
+	if !filereadable(a:file_name)
+		return
 	endif
 
+	let l:bufn = bufnr("%")
+
+	exec "keepalt edit " . fnameescape(a:file_name)
+	exec a:line_num
+	exec "normal! " . a:col_num . '|'
+	if foldlevel(a:line_num) > 0
+		exec "normal! zv"
+	endif
+	exec "normal! zz"
+
+	exec "bwipeout " l:bufn
+	exec "filetype detect"
 endfunction
 
 function! s:gotoline()
