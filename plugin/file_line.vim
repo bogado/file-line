@@ -22,9 +22,9 @@ function! s:reopenAndGotoLine(file_name, line_num, col_num)
 	exec a:line_num
 	exec "normal! " . a:col_num . '|'
 	if foldlevel(a:line_num) > 0
-		exec "normal! zv"
+		normal! zv
 	endif
-	exec "normal! zz"
+	normal! zz
 endfunction
 
 function! s:gotoline()
