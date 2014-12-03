@@ -14,15 +14,15 @@ function! s:reopenAndGotoLine(file_name, line_num, col_num)
 		let l:bufn = bufnr("%")
 
 		exec "keepalt edit " . fnameescape(a:file_name)
-		exec ":" . a:line_num
+		exec a:line_num
 		exec "normal! " . a:col_num . '|'
 		if foldlevel(a:line_num) > 0
 			exec "normal! zv"
 		endif
 		exec "normal! zz"
 
-		exec ":bwipeout " l:bufn
-		exec ":filetype detect"
+		exec "bwipeout " l:bufn
+		exec "filetype detect"
 	endif
 
 endfunction
