@@ -32,11 +32,11 @@ function! s:gotoline()
 	let file = bufname("%")
 
 	" :e command calls BufRead even though the file is a new one.
-	" As a workarround Jonas Pfenniger<jonas@pfenniger.name> added an
+	" As a workaround Jonas Pfenniger<jonas@pfenniger.name> added an
 	" AutoCmd BufRead, this will test if this file actually exists before
 	" searching for a file and line to goto.
-	if (filereadable(file))
-		return
+	if (filereadable(file) || file == '')
+		return file
 	endif
 
 	let l:names = []
