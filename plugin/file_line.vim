@@ -14,7 +14,9 @@ function! s:reopenAndGotoLine(file_name, line_num, col_num)
 		return
 	endif
 
-	let l:bufn = bufnr("%")
+	" Remove the original buffer when it's no longer visible.
+	" This does not break `vim -[poO]`, as with `:bwipeout`.
+	set bufhidden=wipe
 
 	exec "keepalt edit " . fnameescape(a:file_name)
 	exec a:line_num
@@ -23,8 +25,6 @@ function! s:reopenAndGotoLine(file_name, line_num, col_num)
 		exec "normal! zv"
 	endif
 	exec "normal! zz"
-
-	exec "bwipeout " l:bufn
 	exec "filetype detect"
 endfunction
 
