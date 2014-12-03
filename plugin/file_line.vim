@@ -52,5 +52,8 @@ function! s:gotoline()
 	endfor
 endfunction
 
-autocmd! BufNewFile * nested call s:gotoline()
-autocmd! BufRead * nested call s:gotoline()
+augroup file_line
+	au!
+	autocmd BufNewFile  * nested call s:gotoline()
+	autocmd BufReadPost * nested call s:gotoline()
+augroup END
