@@ -32,11 +32,11 @@ function! s:gotoline()
 	let file = bufname("%")
 
 	" :e command calls BufRead even though the file is a new one.
-	" As a workarround Jonas Pfenniger<jonas@pfenniger.name> added an
+	" As a workaround Jonas Pfenniger<jonas@pfenniger.name> added an
 	" AutoCmd BufRead, this will test if this file actually exists before
 	" searching for a file and line to goto.
-	if (filereadable(file))
-		return
+	if (filereadable(file) || file == '')
+		return file
 	endif
 
 	let l:names = []
@@ -48,20 +48,33 @@ function! s:gotoline()
 			let line_num  = l:names[2] == ''? '0' : l:names[2]
 			let  col_num  = l:names[3] == ''? '0' : l:names[3]
 			call s:reopenAndGotoLine(file_name, line_num, col_num)
-			break
+			return file_name
 		endif
 	endfor
 endfunction
 
-function s:startup()
+" Handle entry in the argument list.
+" This is called via `:argdo` when entering Vim.
+function! s:handle_arg()
+	let argname = expand('%')
+	let fname = s:gotoline()
+	if fname != argname
+		let argidx = argidx()
+		exec (argidx+1).'argdelete'
+		exec (argidx)'argadd' fname
+	endif
+endfunction
+
+function! s:startup()
 	autocmd! BufNewFile * nested call s:gotoline()
 	autocmd! BufRead * nested call s:gotoline()
-	silent! bufdo call s:gotoline()
-	silent! bfirst
-	doautocmd FileType
-	doautocmd BufEnter
-	if &diff
-		diffthis
+
+	if argc() > 0
+		let argidx=argidx()
+		argdo call s:handle_arg()
+		exec (argidx+1).'argument'
+		" Manually call Syntax autocommands, ignored by `:argdo`.
+		doautocmd Syntax
 	endif
 endfunction
 
