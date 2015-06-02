@@ -16,7 +16,7 @@ function! s:reopenAndGotoLine(file_name, line_num, col_num)
 
 	let l:bufn = bufnr("%")
 
-	exec "keepalt edit " . fnameescape(a:file_name)
+	silent exec "keepalt edit " . fnameescape(a:file_name)
 	exec a:line_num
 	exec "normal! " . a:col_num . '|'
 	if foldlevel(a:line_num) > 0
@@ -72,7 +72,7 @@ function! s:startup()
 	if argc() > 0
 		let argidx=argidx()
 		argdo call s:handle_arg()
-		exec (argidx+1).'argument'
+		silent exec (argidx+1).'argument'
 		" Manually call Syntax autocommands, ignored by `:argdo`.
 		doautocmd Syntax
 	endif
