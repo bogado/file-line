@@ -86,4 +86,6 @@ function! s:startup()
 	endif
 endfunction
 
-autocmd VimEnter * call s:startup()
+if !isdirectory(expand("%:p"))
+	autocmd VimEnter * call s:startup()
+endif
