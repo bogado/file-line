@@ -66,8 +66,8 @@ function! s:handle_arg()
 endfunction
 
 function! s:startup()
-	autocmd! BufNewFile * nested call s:gotoline()
-	autocmd! BufRead * nested call s:gotoline()
+	autocmd BufNewFile * nested call s:gotoline()
+	autocmd BufRead * nested call s:gotoline()
 
 	if argc() > 0
 		let argidx=argidx()
