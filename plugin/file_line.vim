@@ -71,7 +71,7 @@ function! s:startup()
 
 	if argc() > 0
 		let argidx=argidx()
-		argdo call s:handle_arg()
+		silent argdo call s:handle_arg()
 		exec (argidx+1).'argument'
 		" Manually call Syntax autocommands, ignored by `:argdo`.
 		doautocmd Syntax
