@@ -51,6 +51,7 @@ function! s:gotoline()
 			return file_name
 		endif
 	endfor
+	return file
 endfunction
 
 " Handle entry in the argument list.
