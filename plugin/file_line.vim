@@ -4,10 +4,17 @@ if exists('g:loaded_file_line') || (v:version < 701)
 endif
 let g:loaded_file_line = 1
 
-" list with all possible expressions :
-"	 matches file(10) or file(line:col)
-"	 Accept file:line:column: or file:line:column and file:line also
-let s:regexpressions = [ '\([^(]\{-1,}\)(\%(\(\d\+\)\%(:\(\d*\):\?\)\?\))', '\(.\{-1,}\):\%(\(\d\+\)\%(:\(\d*\):\?\)\?\)\?' ]
+" below regexp will separate filename and line/column number
+" possible inputs to get to line 10 (and column 99) in code.cc are:
+" * code.cc(10)
+" * code.cc(10:99)
+" * code.cc:10
+" * code.cc:10:99
+"
+" closing braces/colons are ignored, so also acceptable are:
+" * code.cc(10
+" * code.cc:10:
+let s:regexpressions = [ '\(.\{-1,}\)[(:]\(\d\+\)\%(:\(\d\+\):\?\)\?' ]
 
 function! s:reopenAndGotoLine(file_name, line_num, col_num)
 	if !filereadable(a:file_name)
