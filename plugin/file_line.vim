@@ -69,7 +69,7 @@ function! s:handle_arg()
 	if fname != argname
 		let argidx = argidx()
 		exec (argidx+1).'argdelete'
-		exec (argidx)'argadd' fname
+		exec (argidx)'argadd' fnameescape(fname)
 	endif
 endfunction
 
