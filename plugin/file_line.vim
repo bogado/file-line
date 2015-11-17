@@ -83,6 +83,7 @@ function! s:startup()
 		exec (argidx+1).'argument'
 		" Manually call Syntax autocommands, ignored by `:argdo`.
 		doautocmd Syntax
+		doautocmd FileType
 	endif
 endfunction
 
