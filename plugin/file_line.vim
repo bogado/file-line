@@ -23,16 +23,16 @@ function! s:reopenAndGotoLine(file_name, line_num, col_num)
 
 	let l:bufn = bufnr("%")
 
-	exec "keepalt edit " . fnameescape(a:file_name)
-	exec a:line_num
-	exec "normal! " . a:col_num . '|'
+	silent! exec "keepalt edit " . fnameescape(a:file_name)
+	silent! exec a:line_num
+	silent! exec "normal! " . a:col_num . '|'
 	if foldlevel(a:line_num) > 0
-		exec "normal! zv"
+		silent! exec "normal! zv"
 	endif
-	exec "normal! zz"
+	silent! exec "normal! zz"
 
-	exec "bwipeout " l:bufn
-	exec "filetype detect"
+	silent! exec "bwipeout " l:bufn
+	silent! exec "filetype detect"
 endfunction
 
 function! s:gotoline()
@@ -68,8 +68,8 @@ function! s:handle_arg()
 	let fname = s:gotoline()
 	if fname != argname
 		let argidx = argidx()
-		exec (argidx+1).'argdelete'
-		exec (argidx)'argadd' fnameescape(fname)
+		silent! exec (argidx+1).'argdelete'
+		silent! exec (argidx)'argadd' fnameescape(fname)
 	endif
 endfunction
 
@@ -80,7 +80,7 @@ function! s:startup()
 	if argc() > 0
 		let argidx=argidx()
 		silent argdo call s:handle_arg()
-		exec (argidx+1).'argument'
+		silent! exec (argidx+1).'argument'
 		" Manually call Syntax autocommands, ignored by `:argdo`.
 		doautocmd Syntax
 		doautocmd FileType
