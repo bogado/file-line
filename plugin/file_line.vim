@@ -14,7 +14,7 @@ let g:loaded_file_line = 1
 " closing braces/colons are ignored, so also acceptable are:
 " * code.cc(10
 " * code.cc:10:
-let s:regexpressions = [ '\(.\{-1,}\)[(:]\(\d\+\)\%(:\(\d\+\):\?\)\?' ]
+let s:regexpression = '\(.\{-1,}\)[(:]\(\d\+\)\%(:\(\d\+\):\?\)\?'
 
 function! s:reopenAndGotoLine(file_name, line_num, col_num)
   if !filereadable(a:file_name)
@@ -38,27 +38,28 @@ endfunction
 function! s:gotoline()
   let file = bufname("%")
 
-  " :e command calls BufRead even though the file is a new one.
-  " As a workaround Jonas Pfenniger<jonas@pfenniger.name> added an
-  " AutoCmd BufRead, this will test if this file actually exists before
-  " searching for a file and line to goto.
+  " doesn't try to reopen files that don't even exist
   if (filereadable(file) || file == '')
     return file
   endif
 
-  let l:names = []
-  for regexp in s:regexpressions
-    let l:names =  matchlist(file, regexp)
+  let l:names = matchlist(file, s:regexpression)
 
-    if ! empty(l:names)
-      let file_name = l:names[1]
-      let line_num  = l:names[2] == ''? '0' : l:names[2]
-      let  col_num  = l:names[3] == ''? '0' : l:names[3]
-      call s:reopenAndGotoLine(file_name, line_num, col_num)
-      return file_name
-    endif
-  endfor
-  return file
+  if empty(l:names)
+    return file
+  endif
+
+  let file_name = l:names[1]
+  let line_num  = l:names[2] == ''? '0' : l:names[2]
+  let  col_num  = l:names[3] == ''? '0' : l:names[3]
+
+  " doesn't try to reopen files
+  if file_name == file
+    return file
+  endif
+
+  call s:reopenAndGotoLine(file_name, line_num, col_num)
+  return file_name
 endfunction
 
 " Handle entry in the argument list.
@@ -79,7 +80,7 @@ function! s:startup()
 
   if argc() > 0
     let argidx=argidx()
-    silent call s:handle_arg()
+    call s:handle_arg()
     exec (argidx+1).'argument'
     " Manually call Syntax autocommands, ignored by `:argdo`.
     doautocmd Syntax
