@@ -9,6 +9,7 @@ Examples:
   
     vim index.html:20
     vim app/models/user.rb:1337
+    vim lib/some.pm#L69
 
 With this little script in your plugins folder if the stuff after the colon is a number and
 a file exists with the name especified before the colon vim will open this file and take you
