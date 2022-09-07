@@ -54,8 +54,10 @@ function! s:gotoline()
 			let file_name = l:names[1]
 			let line_num  = l:names[2] == ''? '0' : l:names[2]
 			let  col_num  = l:names[3] == ''? '0' : l:names[3]
-			call s:reopenAndGotoLine(file_name, line_num, col_num)
-			return file_name
+			if filereadable(file_name)
+				call s:reopenAndGotoLine(file_name, line_num, col_num)
+				return file_name
+			endif
 		endif
 	endfor
 	return file
