@@ -14,7 +14,7 @@ let g:loaded_file_line = 1
 " closing braces/colons are ignored, so also acceptable are:
 " * code.cc(10
 " * code.cc:10:
-let s:regexpressions = [ '\(.\{-1,}\)[(:]\(\d\+\)\%(:\(\d\+\):\?\)\?' ]
+let s:regexpressions = [ '\(.\{-1,}\)[(:]\(\d*\)\%(:\(\d\+\):\?\)\?', ]
 
 function! s:reopenAndGotoLine(file_name, line_num, col_num)
 	if !filereadable(a:file_name)
