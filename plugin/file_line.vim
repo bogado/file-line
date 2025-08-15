@@ -35,7 +35,10 @@ function! s:reopenAndGotoLine(file_name, line_num, col_num)
 	exec "filetype detect"
 endfunction
 
-function! s:gotoline()
+" Returns actual file name (without :* part)
+" If is_goto parameter is 1, then file will be re-opened at the line parsed from
+" :* part
+function! s:get_file_name_and_goto(is_goto)
 	let file = bufname("%")
 
 	" :e command calls BufRead even though the file is a new one.
@@ -53,12 +56,25 @@ function! s:gotoline()
 		if ! empty(l:names)
 			let file_name = l:names[1]
 			let line_num  = l:names[2] == ''? '0' : l:names[2]
-			let  col_num  = l:names[3] == ''? '0' : l:names[3]
-			call s:reopenAndGotoLine(file_name, line_num, col_num)
+			let col_num   = l:names[3] == ''? '0' : l:names[3]
+			if (a:is_goto == 1)
+				call s:reopenAndGotoLine(file_name, line_num,
+							\ col_num)
+			endif
 			return file_name
 		endif
 	endfor
 	return file
+endfunction
+
+" Get the actual file name
+function! s:file_name()
+	return s:get_file_name_and_goto(0)
+endfunction
+
+" Open file at the line after :* part
+function! s:gotoline()
+	return s:get_file_name_and_goto(1)
 endfunction
 
 " Handle entry in the argument list.
@@ -87,6 +103,7 @@ function! s:startup()
 	endif
 endfunction
 
-if !isdirectory(expand("%:p"))
+" Only use file_line upon files (not directory), and only if file already exists
+if (!isdirectory(expand("%:p")) && filereadable(expand(s:file_name())))
 	autocmd VimEnter * call s:startup()
 endif
